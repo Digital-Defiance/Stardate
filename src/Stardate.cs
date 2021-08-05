@@ -1,6 +1,6 @@
 ﻿namespace Stardate
 {
-using System;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -112,9 +112,11 @@ using System;
             { StardateTimeline.STOAnthodev, 0F },
         };
 
-        public static DateTime stardateToInternal(string date, StardateTimeline timeline) {
+        public static DateTime stardateToInternal(string date, StardateTimeline timeline)
+        {
             float jdc;
-            switch (timeline) {
+            switch (timeline)
+            {
                 case StardateTimeline.Main:
                     jdc = stardateMainToJDC(date);
                     break;
@@ -144,9 +146,9 @@ using System;
             case StardateTimeline.STOHynes:
                 return stardateSTOHynesToJDC(date);
                 */
-            case StardateTimeline.STOAcademy:
-                jdc = stardateFixedRateToJDC(date, timeline);
-                break;
+                case StardateTimeline.STOAcademy:
+                    jdc = stardateFixedRateToJDC(date, timeline);
+                    break;
                 /*
             case StardateTimeline.STOTom:
                 return stardateFixedRateToJDC(date, timeline);
@@ -156,7 +158,7 @@ using System;
                 default:
                     throw new ArgumentException(nameof(timeline));
             }
-            
+
             return Jdc.JdcToInternal(jdc, JdcFormat.Full);
         }
         //public static float stardateJDCToFixedRate(float jdc, StardateTimeline mode) {
@@ -173,7 +175,8 @@ using System;
         //	return *date.Add(date.Quo(date.Sub(date, stardateFixedRateOffsets[mode]), stardateFixedRateRates[mode]), stardateFixedRateCutoffs[mode])
         //}
 
-        public static float stardateMainToJDC(string stardate) {
+        public static float stardateMainToJDC(string stardate)
+        {
             long region, issue;
 
             var stardateString = new StardateString(stardate);
@@ -181,11 +184,14 @@ using System;
             var sdBigFloat = stardateString.Stardate;
             issue = stardateString.Issue.HasValue ? stardateString.Issue.Value : 0;
 
-            if (issue >= 21) {
+            if (issue >= 21)
+            {
                 region = 3;
 
                 sdBigFloat += (100000f * issue);
-            } else {
+            }
+            else
+            {
                 sdBigFloat += (10000f * issue);
                 region = 0;
                 while (region < 2 && sdBigFloat.CompareTo(stardateMainValues[region + 1]) >= 0)
@@ -196,19 +202,22 @@ using System;
             return sdBigFloat + stardateMainCutoffs[region] + ((sdBigFloat - stardateMainValues[region]) / stardateMainRates[region]);
         }
 
-        public string stardateJDCToMain(float jdc) {
+        public string stardateJDCToMain(float jdc)
+        {
             var region = 0;
 
             long issue;
             var stardate = 0.0F;
             string format;
-            while (region < 3 && jdc.CompareTo(stardateMainCutoffs[region + 1]) >= 0) {
+            while (region < 3 && jdc.CompareTo(stardateMainCutoffs[region + 1]) >= 0)
+            {
                 region++;
             }
 
             stardate += stardateMainValues[region] + ((jdc - stardateMainCutoffs[region]) * stardateMainRates[region]);
 
-            if (region == 3) {
+            if (region == 3)
+            {
                 issue = ((long)(stardate / 100000.0f));
                 stardate -= (100000F * issue);
                 return string.Format("[{0}]{1:#####.0######}", issue, stardate);
@@ -217,9 +226,10 @@ using System;
             {
                 issue = ((long)(stardate / 10000.0F));
                 stardate -= (10000F * issue);
-                if (stardate.CompareTo(0F) < 0) {
+                if (stardate.CompareTo(0F) < 0)
+                {
                     issue--;
-                   stardate += 10000F;
+                    stardate += 10000F;
                 }
                 return string.Format("[{0}]{1:####.0######}", issue, stardate);
             }

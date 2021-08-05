@@ -19,7 +19,8 @@
 
                 this.Issue = long.Parse(parts[1]);
                 this.Stardate = float.Parse(parts[3]);
-            } else
+            }
+            else
             {
                 this.Issue = null;
                 this.Stardate = float.Parse(stardate);
