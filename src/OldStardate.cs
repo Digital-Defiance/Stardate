@@ -70,20 +70,24 @@
 
         public DateTime DateTime => this.utcDate;
 
-        public int CompareTo(OldStardate other)
+        public int CompareTo(OldStardate? other)
         {
-            return (this.Double == other.Double) ? 0 : (this.Double > other.Double) ? -1 : 1;
+            return (other is not null && (this.Double == other.Double)) ? 0 : (other is not null && (this.Double > other.Double)) ? -1 : 1;
         }
 
-        public bool Equals(OldStardate other)
+        public bool Equals(OldStardate? other)
         {
-            return this.Double == other.Double;
+            return other is not null && this.Double == other.Double;
         }
 
-        public string ToString(string format, IFormatProvider formatProvider) =>
-            this.Double.ToString(format, formatProvider);
+        public string ToString(string? format, IFormatProvider? formatProvider)
+        {
+            return this.Double.ToString(format, formatProvider);
+        }
 
-        public string ToString() =>
-            this.Double.ToString();
+        public override string ToString()
+        {
+            return this.Double.ToString();
+        }
     }
 }
